@@ -8,24 +8,52 @@ document.addEventListener('DOMContentLoaded', function(){
   console.log('DOMContentLoaded event triggered')
   let errorModal = document.getElementById('modal')
   errorModal.className='hidden'
+  function hideError(){
+    errorModal.className='hidden'
+  }//end of hide error 
+
+function makeFullHeart(input){
+  mimicServerCall()
+    .then( resolution  => {
+    input.innerHTML = FULL_HEART
+    input.className=('activated-heart')
+    console.log('changed empty heard to activated, and FULL')
+    })
+  .catch(function (resolution){
+    let errorMessage = document.getElementById('modal-message')
+    errorMessage.innerText = `${resolution}`
+    errorModal.className='unhidden'
+    setTimeout(hideError, 5000)
+  })
+} // end of fullHeart 
+
+function makeEmptyHeart(input){
+  mimicServerCall()
+  .then( resolution  => {
+    input.innerHTML = EMPTY_HEART
+    input.className='like-glyph'
+    console.log('changed full heart to empty, and grey')
+    })
+    .catch(function (resolution){
+      let errorMessage = document.getElementById('modal-message')
+      errorMessage.innerText = `${resolution}`
+      errorModal.className='unhidden'
+      setTimeout(hideError, 5000)
+    })
+}// end of emptyHeart
 
   document.addEventListener('click', function(e){
-      console.log('click registered')
+      console.log('enter click listener')
       let bttn= e.target
       console.log(bttn)
       if (bttn.className==='like-glyph'){
-      let person= bttn.parentNode.parentNode.parentNode.parentNode
-      console.log(person)
-      let id= person.id //string 
-      console.log(id)
-      mimicServerCall()
-      console.log('passed mimicServerCall')
+        makeFullHeart(bttn)
+      } else if (bttn.className==='activated-heart'){
+        makeEmptyHeart(bttn)
       }
   }) // end of click event listener 
 
-
-
-})
+}) // end of DOMContentLoaded event 
 
 
 
